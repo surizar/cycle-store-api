@@ -1,2 +1,2 @@
-# cycle-store-api
-products api for the cycle store
+# Cycle Store API
+Product API for the cycle store

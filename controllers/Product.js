@@ -1,9 +1,12 @@
-//const members = require("../Members");
-const products = require("../models/product");
+const products = require("../models/Products");
 const uuid = require("uuid");
-//const firebase = require("../firebase");
 
+//const firebase = require("../firebase");
 //const getFirebaseDb = require("../firebase").getDb;
+
+exports.readProducts = (req, res) => {
+  res.json(products);
+};
 
 exports.readProduct = (req, res) => {
   //res.send(req.params.id);

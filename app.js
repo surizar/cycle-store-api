@@ -1,11 +1,8 @@
 const express = require("express");
+const { urlencoded } = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
-
-//const firebaseConnect = require("./services");
-
 const productRoutes = require("./routes/api/products");
-const { urlencoded } = require("express");
 
 const app = express();
 

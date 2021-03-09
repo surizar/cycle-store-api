@@ -24,7 +24,7 @@ router.put("/:id", productController.updateProduct);
 router.delete("/:id", productController.deleteProduct);
 
 /**
- *  Get products
+ *  Get all products
  */
 
 router.get("/", productController.readProducts);

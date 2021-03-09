@@ -1,15 +1,19 @@
 const products = require("../models/Products");
 const uuid = require("uuid");
 
-//const firebase = require("../firebase");
-//const getFirebaseDb = require("../firebase").getDb;
+/**
+ *  Read All Products
+ */
 
 exports.readProducts = (req, res) => {
   res.json(products);
 };
 
+/**
+ *  Read Product by Id
+ */
+
 exports.readProduct = (req, res) => {
-  //res.send(req.params.id);
   const found = products.some(
     (product) => product.id === parseInt(req.params.id)
   );
@@ -23,8 +27,11 @@ exports.readProduct = (req, res) => {
   }
 };
 
+/**
+ *  Create Product
+ */
+
 exports.createProduct = (req, res) => {
-  //res.send(req.body);
   const newProduct = {
     id: uuid.v4(),
     name: req.body.name,
@@ -36,24 +43,15 @@ exports.createProduct = (req, res) => {
     return res.status(400).json({ msg: "Please include a name and email" });
   }
 
-  /*
-  firebase.firestore().collection("times").add({
-    title: "Rubiks cube",
-    time_seconds: 45,
-  });*/
-  /*  const rdb = getFirebaseDb();
-  rdb.ref("products").push({
-    title: "ex",
-    price: 250,
-    imageUrl: "image.jpg",
-  });
-*/
   products.push(newProduct);
   res.json(products);
 };
 
+/**
+ *  Update Product
+ */
+
 exports.updateProduct = (req, res) => {
-  //res.send(req.params.id);
   const found = products.some(
     (product) => product.id === parseInt(req.params.id)
   );
@@ -62,8 +60,12 @@ exports.updateProduct = (req, res) => {
     const updProduct = req.body;
     products.forEach((product) => {
       if (product.id === parseInt(req.params.id)) {
-        product.name = updProduct.name ? updProduct.name : product.name;
-        product.email = updProduct.email ? updProduct.email : product.email;
+        product.headline = updProduct.headline
+          ? updProduct.headline
+          : product.headline;
+        product.description = updProduct.description
+          ? updProduct.description
+          : product.description;
         res.json({ msg: "Product updated", product });
       }
     });
@@ -72,18 +74,22 @@ exports.updateProduct = (req, res) => {
   }
 };
 
+/**
+ *  Delete Product
+ */
+
 exports.deleteProduct = (req, res) => {
-  //res.send(req.params.id);
   const found = products.some(
     (product) => product.id === parseInt(req.params.id)
   );
 
   if (found) {
+    del_products = products.filter(
+      (product) => product.id !== parseInt(req.params.id)
+    );
     res.json({
       msg: " Product deleted",
-      products: products.filter(
-        (product) => product.id !== parseInt(req.params.id)
-      ),
+      products: del_products,
     });
   } else {
     res.status(400).json({ msg: `No product with the id of ${req.params.id}` });

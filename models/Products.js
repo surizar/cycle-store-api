@@ -1,3 +1,45 @@
+const serverConfig = require("../config/server-config");
+const getFirebaseDb = require("../services/firebase/firebase").getDb;
+
+module.exports = class Product {
+  constructor(headline, description, price, image, brandId) {
+    this.headline = headline;
+    this.description = description;
+    this.price = price;
+    this.image = image;
+    this.brandId = brandId;
+  }
+
+  saveFirebase() {
+    const rdb = getFirebaseDb();
+    return new Promise((resolve, reject) => {
+      rdb
+        .ref("products")
+        .push({
+          headline: this.headline,
+          description: this.description,
+          price: this.price,
+          image: this.image,
+          brandId: this.brandId,
+        })
+        .then((result) => {
+          const imageUrl = `${serverConfig.scheme}://${serverConfig.server}:${serverConfig.port}/${this.imageUrl}`;
+          resolve({
+            message: "Product succesfully added",
+            product: {
+              id: result.key,
+              headline: this.headline,
+              description: this.description,
+              price: this.price,
+              image: imageUrl,
+              brandId: this.brandId,
+            },
+          });
+        });
+    });
+  }
+};
+
 const products = [
   {
     id: 1,

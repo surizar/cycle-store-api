@@ -2,7 +2,10 @@ const express = require("express");
 const { urlencoded } = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
+const serverConfig = require("./config/server-config");
+
 const productRoutes = require("./routes/api/products");
+const firebaseConnect = require("./services/firebase/firebase").firebaseConnect;
 
 const app = express();
 
@@ -25,5 +28,9 @@ app.use((req, res, next) => {
 
 app.use("/api/products", productRoutes);
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server started on port: ${PORT}`));
+//firebaseConnect();
+
+//const PORT = process.env.PORT || 5000;
+app.listen(serverConfig.port, serverConfig.ip, () =>
+  console.log(`Server started at ${serverConfig.server}:${serverConfig.port}`)
+);

@@ -1,20 +1,13 @@
 const firebaseAdmin = require("firebase-admin");
 var serviceAccount = require("../../credentials/firebase/credential.json");
 
-let rdb;
+firebaseAdmin.initializeApp({
+  credential: firebaseAdmin.credential.cert(serviceAccount),
+  databaseURL: "https://bikestoreapp-default-rtdb.firebaseio.com/",
+});
 
-const firebaseConnect = () => {
-  firebaseAdmin.initializeApp({
-    credential: firebaseAdmin.credential.cert(serviceAccount),
-    databaseURL: "https://bikestoreapp-default-rtdb.firebaseio.com/",
-  });
-  rdb = firebaseAdmin.database();
+const firebaseDatabase = firebaseAdmin.database();
+
+module.exports = {
+  rdb: firebaseDatabase,
 };
-
-const getDb = () => {
-  if (rdb) return rdb;
-  throw "Firebase not found";
-};
-
-exports.firebaseConnect = firebaseConnect;
-exports.getDb = getDb;

@@ -1,12 +1,23 @@
-const products = require("../models/Products");
+//const products = require("../models/Products");
 const uuid = require("uuid");
+const { rdb } = require("../services/firebase/firebase");
 
 /**
  *  Read All Products
  */
 
 exports.readProducts = (req, res) => {
-  res.json(products);
+  //res.json(products);
+  rdb.ref("Products").once("value", (snapshot) => {
+    let products = snapshot.val();
+    products = Object.keys(products).map((key) => ({
+      id: key,
+      ...products[key],
+    }));
+    res.status(200).json({
+      products,
+    });
+  });
 };
 
 /**
@@ -32,19 +43,32 @@ exports.readProduct = (req, res) => {
  */
 
 exports.createProduct = (req, res) => {
+  const id = Math.floor(Math.random() * 100);
   const newProduct = {
-    id: uuid.v4(),
-    name: req.body.name,
-    email: req.body.email,
-    status: "active",
+    //id: uuid.v4(),
+    //id: id,
+    Headline: req.body.headline,
+    Price: req.body.price,
   };
 
+  rdb
+    .ref("Products")
+    .push(newProduct)
+    .then((ref) => {
+      res.status(201).json({
+        message: "Product succesfully added",
+        product: { id: ref.key, ...newProduct },
+      });
+    });
+
+  /*
   if (!newProduct.name || !newProduct.email) {
     return res.status(400).json({ msg: "Please include a name and email" });
   }
 
   products.push(newProduct);
   res.json(products);
+  */
 };
 
 /**
